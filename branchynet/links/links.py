@@ -50,10 +50,7 @@ class X(chainer.ChainList):
     def __call__(self, x, test):
         h = x
         for link in self:
-            if len(inspect.getargspec(link.__call__)[0]) == 2:
-                h = link(h)
-            else:
-                h = link(h,test)
+            h = link(h)
         if x.data.shape != h.data.shape:
             xp = chainer.cuda.get_array_module(x.data)
             n, c, hh, ww = x.data.shape
@@ -120,10 +117,7 @@ class Net(ChainList):
     def __call__(self, x, test=False, starti=0, endi=None):
         h = x
         for link in self[starti:endi]:
-            if len(inspect.getargspec(link.__call__)[0]) == 2:
-                h = link(h)
-            else:
-                h = link(h,test)
+            h = link(h)
         self.h = h
         return h
     def train(self, x, t, starti=0, endi=None):
@@ -161,9 +155,6 @@ class Branch(ChainList):
     def __call__(self, x, test=False):
         h = x
         for link in self[starti:endi]:
-            if len(inspect.getargspec(link.__call__)[0]) == 2:
-                h = link(h)
-            else:
-                h = link(h,test)
-        return h
+            h = link(h)
+            return h
     
